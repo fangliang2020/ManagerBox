@@ -1,0 +1,10 @@
+--cpu=Cortex-M33 --fpu=FPv5-SP -g --pd "__MICROLIB SETA 1"
+-I.\RTE\_managerBox
+-IC:\Users\123\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include
+-IC:\Users\123\AppData\Local\Arm\Packs\Keil\STM32L5xx_DFP\1.2.0\Drivers\CMSIS\Device\ST\STM32L5xx\Include
+--pd "__UVISION_VERSION SETA 527"
+--pd "_RTE_ SETA 1"
+--pd "STM32L552xx SETA 1"
+--list startup_stm32l552xx.lst
+--xref -o spi\startup_stm32l552xx.o
+--depend spi\startup_stm32l552xx.d "startup_stm32l552xx.s"
