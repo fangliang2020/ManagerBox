@@ -1,7 +1,4 @@
 SET PATH=C:\Keil_v5\ARM\ARMCLANG\Bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files\VanDyke Software\Clients\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\GnuWin32\bin;C:\Program Files\Git\cmd;D:\Program Files\Microsoft VS Code\bin;C:\Program Files\Microsoft VS Code\bin;C:\mingw64\bin;C:\Cadence\Cadence\Cadence_SPB_16.6\openaccess\bin\win32\opt;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\capture;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\pspice;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\specctra\bin;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\fet\bin;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\libutil\bin;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\bin;C:\Cadence\Cadence\Cadence_SPB_16.6\tools\pcb\bin;D:\user ziliao\Hi3519\svp\HiSVP_PC_V1.2.2.0\tools\nnie\windows\ruyi_env_setup-2.0.38\mingw64\bin;D:\user ziliao\Hi3519\svp\HiSVP_PC_V1.2.2.0\tools\nnie\windows\ruyi_env_setup-2.0.38\mingw64\msys\bin;C:\Program Files\VanDyke Software\Clients\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\GnuWin32\bin;C:\Users\123\AppData\Local\Microsoft\WindowsApps;C:\mingw64\bin
-SET ARMCC6_ASMOPT=--diag_suppress=9931
-SET ARMCC6_CCOPT=--diag_suppress=9931
-SET ARMCC6_LINKOPT=--diag_suppress=9931
 SET CPU_TYPE=STM32L552RCTx
 SET CPU_VENDOR=STMicroelectronics
 SET UV2_TARGET=managerBox
@@ -9,7 +6,6 @@ SET CPU_CLOCK=0x007A1200
 "C:\Keil_v5\ARM\ARMCLANG\Bin\ArmAsm" --Via "spi\startup_stm32l552xx._ia"
 "C:\Keil_v5\ARM\ARMCLANG\Bin\ArmClang.exe" @"spi\main.__i"
 "C:\Keil_v5\ARM\ARMCLANG\Bin\ArmClang.exe" @"spi\gpio.__i"
-"C:\Keil_v5\ARM\ARMCLANG\Bin\ArmClang.exe" @"spi\dma.__i"
 "C:\Keil_v5\ARM\ARMCLANG\Bin\ArmClang.exe" @"spi\i2c.__i"
 "C:\Keil_v5\ARM\ARMCLANG\Bin\ArmClang.exe" @"spi\iwdg.__i"
 "C:\Keil_v5\ARM\ARMCLANG\Bin\ArmClang.exe" @"spi\spi.__i"

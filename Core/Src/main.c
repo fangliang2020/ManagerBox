@@ -19,7 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "dma.h"
 #include "i2c.h"
 #include "iwdg.h"
 #include "spi.h"
@@ -98,7 +97,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   MX_UART4_Init();
@@ -108,7 +106,7 @@ int main(void)
   MX_I2C4_Init();
   MX_SPI3_Init();
   MX_TIM6_Init();
-//  MX_IWDG_Init();
+ // MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
 	
 	spl0607_init();
@@ -132,24 +130,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		if(dir<500)
-		{
-		  	dir++;
-				pwmVal++;
-				__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,pwmVal);
-				HAL_Delay(1);
-		}
-		else if(dir>=500&&dir<1000)
-		{
-			 dir++;
-			 pwmVal--;
-				__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,pwmVal);
-			 HAL_Delay(1);
-		}
-		else 
-		{
-			dir=0;
-		}
+	
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -214,6 +195,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 	if(htim==(&htim6))
 	{
+		if(dir<500)
+		{
+		  	dir+=5;
+				pwmVal+=5;
+				__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,pwmVal);
+		
+		}
+		else if(dir>=500&&dir<1000)
+		{
+			 dir+=5;
+			 pwmVal-=5;
+				__HAL_TIM_SetCompare(&htim3,TIM_CHANNEL_1,pwmVal);
+		
+		}
+		else 
+		{
+			dir=0;
+		}
 	//	user_spl0607_get();
 		Loop_Sample_Aquisition();
 //		HAL_IWDG_Refresh(&hiwdg);
@@ -229,6 +228,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	 else if(tim6_cnt%50==0) //1s
 	 {
 		 flag_delay1s=1;
+	//	 HAL_GPIO_TogglePin();
 	 }
 	 else if(tim6_cnt%150==0) //3s
 	 {
@@ -236,6 +236,21 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	 }
 		
 	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+  /* Set transmission flag: transfer complete */
+	if (UartHandle->Instance == USART3) 
+	{
+		module_recv_buffer[module_recv_write_index] = usart3_recbuf; //
+		module_recv_write_index++;
+		if(module_recv_write_index >= BUFFER_SIZE)       			//
+		{
+			module_recv_write_index = 0;
+		}
+		 HAL_UART_Receive_IT(&huart3, (uint8_t *)&usart3_recbuf, 1);
+ 	}
 }
 
 /* USER CODE END 4 */

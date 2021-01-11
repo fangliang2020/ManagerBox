@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -36,9 +36,10 @@ extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN Private defines */
-extern DMA_HandleTypeDef hdma_usart3_tx;
-extern DMA_HandleTypeDef hdma_usart3_rx;
-
+//extern DMA_HandleTypeDef hdma_uart4_rx;
+//extern DMA_HandleTypeDef hdma_usart2_rx;
+//extern DMA_HandleTypeDef hdma_usart3_rx;
+extern uint8_t usart2_recbuf, usart3_recbuf,usart4_recbuf;
 /* USER CODE END Private defines */
 
 void MX_UART4_Init(void);

@@ -35,7 +35,7 @@ extern "C" {
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "dma.h"
+//#include "dma.h"
 #include "i2c.h"
 #include "spi.h"
 #include "tim.h"

@@ -19,21 +19,21 @@ void parse_csq_cmd(char *buf,int len);
 void parse_creg_cmd(char *buf,int len);
 
 AT_STRUCT at_pack[]={
-	{AT_ATE0,"ATE0","OK",300,NULL},
-	{AT_GMM,"AT+GMM","OK",300,NULL},
-	{AT_CPIN,"AT+CPIN?","OK",300,NULL},
-	{AT_COPS,"AT+COPS=?","OK",300,parse_cops_cmd},  //mmc mnc码  ---+COPS:(1,"CHN-UNICOM","UNICOM","46001",2)
-	{AT_CIMI,"AT+CIMI","OK",300,parse_imsi_cmd}, //IMSI 码  AT+CIMI----  460023210226023 
-	{AT_GSN,"AT+GSN","OK",300,parse_imei_cmd}, //IMEI 码  AT+GSN ----  
-	{AT_QCCID,"AT+QCCID","OK",300,parse_qccid_cmd}, //SIM ICCID AT+QCCID---+QCCID: 89860025128306012474
-	{AT_CSQ,"AT+CSQ","OK",300,parse_csq_cmd},//RSSI 信号质量 AT+CSQ  +CSQ: <rssi>,<ber>  +CSQ: (0-31,99),(0-7,99)
-	{AT_CREG,"AT+CREG=2","+CREG: 1",300,parse_creg_cmd},  //+CREG: 1,“D509”,”80D413D”,7    设备基站 LAC 位置区域码   设备基站 CID 基站编号，是个16位的数据（范围是0到65535）
+	{AT_ATE0,"ATE0\r\n","OK",300,NULL},
+	{AT_GMM,"AT+GMM\r\n","OK",300,NULL},
+	{AT_CPIN,"AT+CPIN?\r\n","OK",300,NULL},
+	{AT_COPS,"AT+COPS=?\r\n","OK",300,parse_cops_cmd},  //mmc mnc码  ---+COPS:(1,"CHN-UNICOM","UNICOM","46001",2)
+	{AT_CIMI,"AT+CIMI\r\n","OK",300,parse_imsi_cmd}, //IMSI 码  AT+CIMI----  460023210226023 
+	{AT_GSN,"AT+GSN\r\n","OK",300,parse_imei_cmd}, //IMEI 码  AT+GSN ----  
+	{AT_QCCID,"AT+QCCID\r\n","OK",300,parse_qccid_cmd}, //SIM ICCID AT+QCCID---+QCCID: 89860025128306012474
+	{AT_CSQ,"AT+CSQ\r\n","OK",300,parse_csq_cmd},//RSSI 信号质量 AT+CSQ  +CSQ: <rssi>,<ber>  +CSQ: (0-31,99),(0-7,99)
+	{AT_CREG,"AT+CREG=2\r\n","+CREG: 1",300,parse_creg_cmd},  //+CREG: 1,“D509”,”80D413D”,7    设备基站 LAC 位置区域码   设备基站 CID 基站编号，是个16位的数据（范围是0到65535）
 	{AT_MAX,"","",0,NULL}
 };
 
 void	pure_gsmuart_buf(void)
 {
-	Logln(D_INFO, "pure_gsmuart_buf");	
+	//Logln(D_INFO, "pure_gsmuart_buf");	
 	memset(module_recv_buffer, 0, 255);
 	module_recv_write_index = 0;
 }
@@ -69,7 +69,7 @@ bool get_work_state(void)
 
 void module_init(void)
 {
-	Logln(D_INFO, "IOT_module Start Init");
+	//Logln(D_INFO, "IOT_module Start Init");
 	Send_AT_Command_Timeout(AT_ATE0, 1); 
 	Send_AT_Command_Timeout(AT_GMM, 1);
 	Send_AT_Command_Timeout(AT_CPIN, 1);
@@ -78,7 +78,7 @@ void module_init(void)
 	Send_AT_Command_Timeout(AT_GSN, 1);
 	Send_AT_Command_Timeout(AT_QCCID, 1); 
 	Send_AT_Command_Timeout(AT_CSQ, 1); 
-	Logln(D_INFO,"Init Complete");	
+	//Logln(D_INFO,"Init Complete");	
 }
 
 void at_process(void)
@@ -101,7 +101,7 @@ void at_process(void)
 		Send_AT_Command_Timeout(AT_CREG, 10); 	
 		if(connect_times > 10)
 		{
-			Logln(D_INFO, "reconnect %d times, restart ME",connect_times/40);
+			//Logln(D_INFO, "reconnect %d times, restart ME",connect_times/40);
 			Modem_Dev.status=EN_INIT_STATE;
 		}
 	}
@@ -308,14 +308,14 @@ uint8_t Send_AT_Command(AT_CMD cmd)
 	int8_t i=GetATIndex(cmd), ret=0;
 	if(i==-1)
 	{
-		Logln(D_INFO, "error cmd");
+		//Logln(D_INFO, "error cmd");
 		return ret;
 	}
 	GsmSendData(at_pack[i].cmd_txt, strlen(at_pack[i].cmd_txt));
-	GsmSendData("\r\n", strlen("\r\n"));
+//	GsmSendData("\r\n", strlen("\r\n"));
 	HAL_Delay(at_pack[i].timeout);	
 	len = get_uart_data(buf, 255);
-	Logln(D_INFO, "rcv %d,%s", len,buf);
+	//Logln(D_INFO, "rcv %d,%s", len,buf);
 	if(strstr(buf,at_pack[i].cmd_ret))
 	{
 		if(at_pack[i].fun)
@@ -430,7 +430,7 @@ void parse_another_cmd(char* buf, int len)
 {
 	char* tmp1=NULL,*tmp2 = NULL;
 
-	Logln(D_INFO,"parse_another_cmd,%s", buf);	
+	//Logln(D_INFO,"parse_another_cmd,%s", buf);	
 
 	if(tmp1 = strstr(buf,"CMS ERROR:"))
 	{
@@ -439,7 +439,7 @@ void parse_another_cmd(char* buf, int len)
 		tmp2 = strstr(tmp1,"\r\n");
 		memcpy(data,tmp1+strlen("CMS ERROR:"),tmp2-(tmp1+strlen("CMS ERROR:")));
 		err = atoi(data);
-		Logln(D_INFO,"ERROR code = %d",err);
+		//Logln(D_INFO,"ERROR code = %d",err);
 		Modem_Dev.status=EN_INIT_STATE;
 	}
 	else if(tmp1 = strstr(buf,"CME ERROR:"))
@@ -449,7 +449,7 @@ void parse_another_cmd(char* buf, int len)
 		tmp2 = strstr(tmp1,"\r\n");
 		memcpy(data,tmp1+strlen("CME ERROR:"),tmp2-(tmp1+strlen("CME ERROR:")));
 		err = atoi(data);
-		Logln(D_INFO,"CME ERROR code = %d",err);
+		//Logln(D_INFO,"CME ERROR code = %d",err);
 		Modem_Dev.status=EN_INIT_STATE;
 	}
 	else if(strstr(buf,"CONNECT OK"))
@@ -472,7 +472,7 @@ void parse_another_cmd(char* buf, int len)
 	}
 	else if(strstr(buf,"PDP DEACT") /*|| strstr(buf,"CLOSED")*/)
 	{//NETWORD disconnect
-		Logln(D_INFO,"CLOSED ---%s",buf);
+		//Logln(D_INFO,"CLOSED ---%s",buf);
 		Modem_Dev.status=EN_CONNECT_STATE;
 	}
 }
@@ -506,7 +506,7 @@ void parse_cops_cmd(char *buf,int len) //+COPS:(1,"CHN-UNICOM","UNICOM","46001",
 		memcpy(tmp,tmp1+i+1,j-i-2);
 		memcpy(Modem_Dev.mmc,tmp,3);
 		memcpy(Modem_Dev.mnc,tmp+3,2);
-		Logln(D_INFO,"mmc=%s,mnc=%s",Modem_Dev.mmc,Modem_Dev.mnc);
+		//Logln(D_INFO,"mmc=%s,mnc=%s",Modem_Dev.mmc,Modem_Dev.mnc);
 	}
 	
 }
@@ -517,7 +517,7 @@ void parse_imei_cmd(char *buf,int len)
 	tmp1 = strstr(buf,"\r\n");	
 	tmp2 = strstr(tmp1+2,"\r\n");
 	memcpy(Modem_Dev.imei,tmp1+strlen("\r\n"),tmp2-(tmp1+strlen("\r\n")));
-	Logln(D_INFO,"imei=%s",Modem_Dev.imei);
+	//Logln(D_INFO,"imei=%s",Modem_Dev.imei);
 }
 void parse_imsi_cmd(char *buf,int len)
 {
@@ -526,7 +526,7 @@ void parse_imsi_cmd(char *buf,int len)
 	tmp1 = strstr(buf,"\r\n");	
 	tmp2 = strstr(tmp1+2,"\r\n");
 	memcpy(Modem_Dev.imsi,tmp1+strlen("\r\n"),tmp2-(tmp1+strlen("\r\n")));
-	Logln(D_INFO,"imsi=%s",Modem_Dev.imsi);
+	//Logln(D_INFO,"imsi=%s",Modem_Dev.imsi);
 }
 void parse_qccid_cmd(char *buf,int len)
 {
@@ -535,7 +535,7 @@ void parse_qccid_cmd(char *buf,int len)
 	tmp1 = strstr(buf,"+QCCID: ");	
 	tmp2 = strstr(tmp1,"\r\n");
 	memcpy(Modem_Dev.iccid,tmp1+strlen("+QCCID: "),tmp2-(tmp1+strlen("+QCCID: ")));
-	Logln(D_INFO,"iccid=%s",Modem_Dev.iccid);	
+	//Logln(D_INFO,"iccid=%s",Modem_Dev.iccid);	
 }
 void parse_csq_cmd(char *buf,int len)
 {
@@ -545,7 +545,7 @@ void parse_csq_cmd(char *buf,int len)
 	tmp1 = strstr(buf,"CSQ: ");	
 	tmp2 = strstr(tmp1,",");
 	memcpy(Modem_Dev.rssi,tmp1+strlen("CSQ: "),tmp2-(tmp1+strlen("CSQ: ")));
-	Logln(D_INFO,"csq=%s",Modem_Dev.rssi);	
+	//Logln(D_INFO,"csq=%s",Modem_Dev.rssi);	
 }
 void parse_creg_cmd(char *buf,int len)
 {
@@ -561,7 +561,7 @@ void parse_creg_cmd(char *buf,int len)
 		k=GetComma(3,buf);
 		memcpy(Modem_Dev.lac,tmp1+i+1,j-i-2);
 		memcpy(Modem_Dev.cid,tmp1+k+1,k-j-2);
-		Logln(D_INFO,"lac=%s,cid=%s",Modem_Dev.lac,Modem_Dev.cid);
+		//Logln(D_INFO,"lac=%s,cid=%s",Modem_Dev.lac,Modem_Dev.cid);
 		memcpy(&regist_flag,tmp2+strlen("+CREG: "),1);
 		if(regist_flag=='1')
 		{

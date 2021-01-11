@@ -1,0 +1,180 @@
+<html>
+<body>
+<pre>
+<h1>�Vision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ��Vision V5.27.1.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: fang liang, fangliang, LIC=NQQCX-HJTR3-6QW0X-HF0QT-F38TR-U6MXD
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.27.1.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.12
+Assembler:       Armasm.exe V6.12
+Linker/Locator:  ArmLink.exe V6.12
+Library Manager: ArmAr.exe V6.12
+Hex Converter:   FromElf.exe V6.12
+CPU DLL:         
+Dialog DLL:      
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
+Dialog DLL:      TCM.DLL V1.36.1.0
+ 
+<h2>Project:</h2>
+D:\MBOX\ManagerBox\MDK-ARM\managerbox.uvprojx
+Project File Date:  01/11/2021
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.12', folder: 'C:\Keil_v5\ARM\ARMCLANG\Bin'
+Rebuild target 'managerBox'
+assembling startup_stm32l552xx.s...
+compiling main.c...
+compiling gpio.c...
+compiling i2c.c...
+compiling iwdg.c...
+compiling spi.c...
+compiling tim.c...
+compiling usart.c...
+compiling stm32l5xx_it.c...
+compiling stm32l5xx_hal_msp.c...
+compiling stm32l5xx_hal_i2c.c...
+compiling stm32l5xx_hal_i2c_ex.c...
+compiling stm32l5xx_hal.c...
+compiling stm32l5xx_hal_rcc.c...
+compiling stm32l5xx_hal_rcc_ex.c...
+compiling stm32l5xx_hal_flash.c...
+compiling stm32l5xx_hal_flash_ex.c...
+compiling stm32l5xx_hal_flash_ramfunc.c...
+compiling stm32l5xx_hal_gpio.c...
+compiling stm32l5xx_hal_dma.c...
+compiling stm32l5xx_hal_dma_ex.c...
+compiling stm32l5xx_hal_exti.c...
+compiling stm32l5xx_hal_pwr.c...
+compiling stm32l5xx_hal_pwr_ex.c...
+compiling stm32l5xx_hal_cortex.c...
+compiling stm32l5xx_hal_icache.c...
+compiling stm32l5xx_hal_iwdg.c...
+compiling stm32l5xx_hal_spi.c...
+compiling stm32l5xx_hal_spi_ex.c...
+compiling stm32l5xx_hal_tim.c...
+compiling stm32l5xx_hal_tim_ex.c...
+compiling stm32l5xx_hal_uart.c...
+compiling stm32l5xx_hal_uart_ex.c...
+compiling system_stm32l5xx.c...
+compiling spl06.c...
+compiling LSM6DSO.c...
+compiling W25QXX.c...
+compiling bsp_uart.c...
+compiling es600s.c...
+../HARDWARE/ES600/es600s.c(25): warning: incompatible pointer types initializing 'parseFun' (aka 'void (*)(void *, int)') with an expression of type 'void (char *, int)' [-Wincompatible-pointer-types]
+        {AT_COPS,"AT+COPS=?\r\n","OK",300,parse_cops_cmd},  //mmc mnc<C2><EB>  ---+COPS:(1,"CHN-UNICOM","UNICOM","46001",2)
+                                          ^~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(26): warning: incompatible pointer types initializing 'parseFun' (aka 'void (*)(void *, int)') with an expression of type 'void (char *, int)' [-Wincompatible-pointer-types]
+        {AT_CIMI,"AT+CIMI\r\n","OK",300,parse_imsi_cmd}, //IMSI <C2><EB>  AT+CIMI----  460023210226023 
+                                        ^~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(27): warning: incompatible pointer types initializing 'parseFun' (aka 'void (*)(void *, int)') with an expression of type 'void (char *, int)' [-Wincompatible-pointer-types]
+        {AT_GSN,"AT+GSN\r\n","OK",300,parse_imei_cmd}, //IMEI <C2><EB>  AT+GSN ----  
+                                      ^~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(28): warning: incompatible pointer types initializing 'parseFun' (aka 'void (*)(void *, int)') with an expression of type 'void (char *, int)' [-Wincompatible-pointer-types]
+        {AT_QCCID,"AT+QCCID\r\n","OK",300,parse_qccid_cmd}, //SIM ICCID AT+QCCID---+QCCID: 89860025128306012474
+                                          ^~~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(29): warning: incompatible pointer types initializing 'parseFun' (aka 'void (*)(void *, int)') with an expression of type 'void (char *, int)' [-Wincompatible-pointer-types]
+        {AT_CSQ,"AT+CSQ\r\n","OK",300,parse_csq_cmd},//RSSI <D0>ź<C5><D6><CA><C1><BF> AT+CSQ  +CSQ: <rssi>,<ber>  +CSQ: (0-31,99),(0-7,99)
+                                      ^~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(30): warning: incompatible pointer types initializing 'parseFun' (aka 'void (*)(void *, int)') with an expression of type 'void (char *, int)' [-Wincompatible-pointer-types]
+        {AT_CREG,"AT+CREG=2\r\n","+CREG: 1",300,parse_creg_cmd},  //+CREG: 1,<A1><B0>D509<A1><B1>,<A1><B1>80D413D<A1><B1>,7    <C9>豸<BB><F9>վ LAC λ<D6><C3><C7><F8><D3><F2><C2><EB>   <C9>豸<BB><F9>վ CID <BB><F9>վ<B1><E0><BA>ţ<AC><CA>Ǹ<F6>16λ<B5><C4><CA><FD><BE>ݣ<A8><B7><B6>Χ<CA><C7>0<B5><BD>65535<A3><A9>
+                                                ^~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(158): warning: implicitly declaring library function 'tolower' with type 'int (int)' [-Wimplicit-function-declaration]
+        if (tolower(s[i]) > '9')  
+            ^
+../HARDWARE/ES600/es600s.c(158): note: include the header <ctype.h> or explicitly provide a declaration for 'tolower'
+../HARDWARE/ES600/es600s.c(314): warning: passing 'char [128]' to parameter of type 'uint8_t *' (aka 'unsigned char *') converts between pointers to integer types with different sign [-Wpointer-sign]
+        GsmSendData(at_pack[i].cmd_txt, strlen(at_pack[i].cmd_txt));
+                    ^~~~~~~~~~~~~~~~~~
+../HARDWARE/UART\bsp_uart.h(22): note: passing argument to parameter 'sendData' here
+void GsmSendData(uint8_t* sendData, uint16_t sendLength);
+                          ^
+../HARDWARE/ES600/es600s.c(435): warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+        if(tmp1 = strstr(buf,"CMS ERROR:"))
+           ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(435): note: place parentheses around the assignment to silence this warning
+        if(tmp1 = strstr(buf,"CMS ERROR:"))
+                ^
+           (                              )
+../HARDWARE/ES600/es600s.c(435): note: use '==' to turn this assignment into an equality comparison
+        if(tmp1 = strstr(buf,"CMS ERROR:"))
+                ^
+                ==
+../HARDWARE/ES600/es600s.c(445): warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+        else if(tmp1 = strstr(buf,"CME ERROR:"))
+                ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(445): note: place parentheses around the assignment to silence this warning
+        else if(tmp1 = strstr(buf,"CME ERROR:"))
+                     ^
+                (                              )
+../HARDWARE/ES600/es600s.c(445): note: use '==' to turn this assignment into an equality comparison
+        else if(tmp1 = strstr(buf,"CME ERROR:"))
+                     ^
+                     ==
+../HARDWARE/ES600/es600s.c(486): warning: passing 'char [255]' to parameter of type 'unsigned char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+                parse_http_pkg(http_buf, strlen(http_buf));
+                               ^~~~~~~~
+../HARDWARE/PROTOCAL\protocol.h(187): note: passing argument to parameter 'pBuf' here
+uint8_t parse_http_pkg(unsigned char *pBuf, int len);
+                                      ^
+../HARDWARE/ES600/es600s.c(556): warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+        if(tmp2=strstr(buf,"+CREG: "))
+           ~~~~^~~~~~~~~~~~~~~~~~~~~~
+../HARDWARE/ES600/es600s.c(556): note: place parentheses around the assignment to silence this warning
+        if(tmp2=strstr(buf,"+CREG: "))
+               ^
+           (                         )
+../HARDWARE/ES600/es600s.c(556): note: use '==' to turn this assignment into an equality comparison
+        if(tmp2=strstr(buf,"+CREG: "))
+               ^
+               ==
+12 warnings generated.
+compiling protocol.c...
+../HARDWARE/PROTOCAL/protocol.c(216): warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+../HARDWARE/PROTOCAL/protocol.c(259): warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+2 warnings generated.
+compiling queue.c...
+compiling cJSON.c...
+compiling malloc.c...
+linking...
+Program Size: Code=45646 RO-data=954 RW-data=1656 ZI-data=3696  
+FromELF: creating hex file...
+"spi\managerBox.axf" - 0 Error(s), 14 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.5.1.pack
+                ARM.CMSIS.5.5.1
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.2.0
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32L5xx_DFP.1.2.0.pack
+                Keil.STM32L5xx_DFP.1.2.0
+                STMicroelectronics STM32L5 Series Device Support
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_managerBox
+  C:\Users\123\AppData\Local\Arm\Packs\ARM\CMSIS\5.5.1\CMSIS\Core\Include
+  C:\Users\123\AppData\Local\Arm\Packs\Keil\STM32L5xx_DFP\1.2.0\Drivers\CMSIS\Device\ST\STM32L5xx\Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:5.2.0
+      Include file:  CMSIS\Core\Include\tz_context.h
+      Source file:   CMSIS\Core\Template\ARMv8-M\main_s.c
+      Source file:   CMSIS\Core\Template\ARMv8-M\tz_context.c
+Build Time Elapsed:  00:00:13
+</pre>
+</body>
+</html>

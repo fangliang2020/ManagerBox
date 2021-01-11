@@ -21,6 +21,8 @@ typedef struct UartData
 extern UartData gUartData;
 void GsmSendData(uint8_t* sendData, uint16_t sendLength);
 void USER_UART3_IDLECallback(void);
+void 	USER_UART_IRQHandler(UART_HandleTypeDef *huart);
+void USER_UART_IDLECallback(UART_HandleTypeDef *huart);
 #endif
 
 
