@@ -1,8 +1,0 @@
--xc -std=c11 --target=arm-arm-none-eabi -mcpu=cortex-m33 -mfpu=fpv5-sp-d16 -mfloat-abi=hard -c
--funsigned-char
--D__MICROLIB -gdwarf-3 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -I ../Core/Inc -I ../Drivers/STM32L5xx_HAL_Driver/Inc -I ../Drivers/STM32L5xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32L5xx/Include -I ../Drivers/CMSIS/Include -I ../HARDWARE/SPL06-007 -I ../HARDWARE/IMU -I ../HARDWARE/SPI_FLASH -I ../HARDWARE/UART -I ../cJSONFiles/cJSON -I ../HARDWARE/ES600 -I ../HARDWARE/PROTOCAL -I ../HARDWARE/QUEUE -I ../cJSONFiles/cJSON -I ../MALLOC
--I./RTE/_managerBox
--IC:/Users/123/AppData/Local/Arm/Packs/ARM/CMSIS/5.5.1/CMSIS/Core/Include
--IC:/Users/123/AppData/Local/Arm/Packs/Keil/STM32L5xx_DFP/1.2.0/Drivers/CMSIS/Device/ST/STM32L5xx/Include
--D__UVISION_VERSION="527" -D_RTE_ -DSTM32L552xx -DUSE_HAL_DRIVER -DSTM32L552xx -DUSE_STDPERIPH_DRIVER
--o spi/stm32l5xx_hal_exti.o -MD "../Drivers/STM32L5xx_HAL_Driver/Src/stm32l5xx_hal_exti.c"

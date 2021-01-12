@@ -46,15 +46,15 @@ void MODEM_PWRON(void)
 
 void MODEM_PWRKEY(void)
 {
+	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_SET);
 	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_SET);
 	HAL_Delay(1500);
 	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);	
 	HAL_Delay(100);
 }
 void MODEM_RST(void)
-{
-	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_SET);
-	HAL_Delay(1500);
+{	
+	HAL_Delay(700);
 	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_RESET);	
 	HAL_Delay(100);
 }
@@ -504,7 +504,7 @@ void parse_cops_cmd(char *buf,int len) //+COPS:(1,"CHN-UNICOM","UNICOM","46001",
 		i=GetComma(3,buf);
 		j=GetComma(4,buf);
 		memcpy(tmp,tmp1+i+1,j-i-2);
-		memcpy(Modem_Dev.mmc,tmp,3);
+		memcpy(Modem_Dev.mcc,tmp,3);
 		memcpy(Modem_Dev.mnc,tmp+3,2);
 		//Logln(D_INFO,"mmc=%s,mnc=%s",Modem_Dev.mmc,Modem_Dev.mnc);
 	}
@@ -569,5 +569,60 @@ void parse_creg_cmd(char *buf,int len)
 		}
 	}
 }
+
+void Json_Pack(char *pBuf)
+{	
+		cJSON *root;
+		cJSON *Array;
+	  cJSON *objId;
+		char *pStr;
+	  root=cJSON_CreateObject();
+	  Array=cJSON_CreateArray();
+		objId=cJSON_CreateObject();
+	  cJSON_AddStringToObject(root,"appId",g_Info.appid); //¸ùÄ¿Â¼
+	
+		cJSON_AddStringToObject(objId,"pubIp",g_Info.ES600S_data->devip);
+		cJSON_AddStringToObject(objId,"bootVersion",g_Info.bootVersion);
+		cJSON_AddStringToObject(objId,"hwVersion",g_Info.hwVersion);
+		cJSON_AddStringToObject(objId,"swVersion",g_Info.swVersion);
+	  cJSON_AddStringToObject(objId,"imsi",g_Info.ES600S_data->imsi);
+		cJSON_AddStringToObject(objId,"imei",g_Info.ES600S_data->imei);
+		cJSON_AddStringToObject(objId,"iccid",g_Info.ES600S_data->iccid);
+	  cJSON_AddStringToObject(objId,"rssi",g_Info.ES600S_data->rssi);
+	  cJSON_AddStringToObject(objId,"mcc",g_Info.ES600S_data->mcc);
+		cJSON_AddStringToObject(objId,"mnc",g_Info.ES600S_data->mnc);
+		cJSON_AddStringToObject(objId,"lac",g_Info.ES600S_data->lac);
+	  cJSON_AddStringToObject(objId,"cid",g_Info.ES600S_data->cid);
+		cJSON_AddStringToObject(objId,"onlinetime",g_Info.onlinetime);
+		cJSON_AddNumberToObject(objId,"coordinate",g_Info.coordinate);
+		cJSON_AddNumberToObject(objId,"course",g_Info.course);
+		cJSON_AddNumberToObject(objId,"flightTime",g_Info.flightTime);
+		cJSON_AddNumberToObject(objId,"gs",g_Info.gs);
+		cJSON_AddNumberToObject(objId,"posiAccuracy",g_Info.GPS_data->posiAccuracy);
+		sprintf(g_Info.yali,"%.0f",g_Info.pressure);
+    cJSON_AddStringToObject(objId,"pressure",g_Info.yali);
+		cJSON_AddNumberToObject(objId,"latitude",g_Info.GPS_data->Latitude);
+		cJSON_AddNumberToObject(objId,"longitude",g_Info.GPS_data->longitude);
+		cJSON_AddStringToObject(objId,"orderId",g_Info.orderId);
+		cJSON_AddStringToObject(objId,"rtTime",g_Info.rtTime);
+		cJSON_AddItemToArray(Array, objId);
+		cJSON_AddItemToObject(root, "bizContent", Array);
+		cJSON_AddStringToObject(root,"charset","utf-8");
+		cJSON_AddStringToObject(root,"format","json");
+		cJSON_AddStringToObject(root,"sign","10095C58E762D8B32933F3FA3F7C7250");
+		cJSON_AddStringToObject(root,"signType","md5");
+		cJSON_AddStringToObject(root,"timestamp","20201221144800");
+		pStr = cJSON_Print(root);
+		strcpy(pBuf, pStr);
+}
+	
+
+
+
+
+
+
+
+
 
 

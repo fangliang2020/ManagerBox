@@ -63,21 +63,40 @@ typedef struct{
 	float ROLL;
 	float PITCH;
 }IMUDATA;
-typedef struct{
-	float temperature;
-	float pressure;
-	IMUDATA Imu;
-}SYSTEM;
-extern SYSTEM g_Info;
 
 typedef struct
 {
 	 uint8_t status;
 	 uint8_t sample_timer;
-	 int16_t longitude; //经度
-	 int16_t Latitude;// 经度
+	 float longitude; //经度
+	 float Latitude;// 经度
+	 float posiAccuracy;
 }GPS_DATA;
 extern GPS_DATA GPS_Info;
+
+typedef struct{
+	char appid[15];
+	char bootVersion[10];
+	char hwVersion[10];
+	char swVersion[10];
+	char  onlinetime[20];
+	char offlinetime[20];
+	float coordinate;
+	int course;
+	float flightTime;
+	float gs;	
+	float height;
+	float pressure;
+	char yali[4];
+	float temperature;
+	char orderId[30];
+	char rtTime[20];
+	IMUDATA *Imu_data;
+	GPS_DATA *GPS_data;
+	ES600S_DEV *ES600S_data;
+	
+}SYSTEM;
+extern SYSTEM g_Info;
 
 /* USER CODE END ET */
 

@@ -16,10 +16,11 @@ typedef enum
 
 typedef struct
 {
+	char devip[15];
 	char imsi[20];
 	char imei[20];
 	char iccid[24];
-	char mmc[5];
+	char mcc[5];
 	char mnc[5];
 	char rssi[4];
 	char lac[16];
@@ -67,6 +68,6 @@ void module_init(void);
 void at_process(void);
 bool at_parse_recv(void);
 bool get_work_state(void);
-
+void Json_Pack(char *pBuf);
 #endif
 
