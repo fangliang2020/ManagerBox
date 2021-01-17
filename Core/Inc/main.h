@@ -55,7 +55,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 typedef struct{
-	uint8_t status;
+	uint8_t state;
 	float X_ACCEL;
 	float Y_ACCEL;
 	float Z_ACCEL;

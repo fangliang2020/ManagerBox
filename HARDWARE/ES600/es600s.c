@@ -41,21 +41,21 @@ void	pure_gsmuart_buf(void)
 void MODEM_PWRON(void)
 {
 	HAL_GPIO_WritePin(GPIOC, MODEM_PWR_ON_OFF_Pin,GPIO_PIN_SET);
-	HAL_Delay(1500);
+	HAL_Delay(1000);
 }
 
 void MODEM_PWRKEY(void)
 {
-	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_SET);
-	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_SET);
+//	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_SET);
+	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
 	HAL_Delay(1500);
-	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);	
-	HAL_Delay(100);
+	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_SET);	
+	HAL_Delay(1500);
+	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
 }
 void MODEM_RST(void)
-{	
-	HAL_Delay(700);
-	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_RESET);	
+{		
 	HAL_Delay(100);
 }
 
@@ -91,7 +91,7 @@ void at_process(void)
 	}
 	else if(Modem_Dev.status==EN_INIT_STATE)  
 	{
-		MODEM_RST();
+//		MODEM_RST();
 		module_init();
 		Modem_Dev.status=EN_LOGING_STATE;
 	}

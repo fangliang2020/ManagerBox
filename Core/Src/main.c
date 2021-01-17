@@ -106,7 +106,7 @@ int main(void)
   MX_I2C4_Init();
   MX_SPI3_Init();
   MX_TIM6_Init();
- // MX_IWDG_Init();
+//  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
 	
 	spl0607_init();

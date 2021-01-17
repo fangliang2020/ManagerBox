@@ -83,11 +83,11 @@ void LSM6DSO_Init(void)
 	LSM6DSO_ACC_GYRO_R_WHO_AM_I(0,&who_am_i);
 	if(who_am_i!=LSM6DSO_ACC_GYRO_WHO_AM_I)
 	{
-		g_Info.Imu_data->status=0;
+		g_Info.Imu_data->state=0;
 	}
 	else
 	{
-		g_Info.Imu_data->status=1;
+	//	g_Info.Imu_data->state=1;
 		/* Soft Reset the LSM6DS3 device */
 		LSM6DSO_ACC_GYRO_W_SW_RESET(0, LSM6DSO_ACC_GYRO_SW_RESET_RESET_DEVICE);	
 		HAL_Delay(500);
