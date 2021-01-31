@@ -5,9 +5,16 @@
 #define false 0	
 ES600S_DEV Modem_Dev;
 uint16_t connect_times;
+
 unsigned short recv_read_start_index = 0;
 unsigned short recv_read_end_index = 0;
 char http_buf[255];
+char G_Post_Buf[1024];
+uint16_t Post_Len = 0;
+static uint8_t url_statuc = 0;
+static uint16_t rCount = 0;
+static uint16_t rTime = 0;
+
 unsigned short http_size=0;
 char another_buf[255];
 
@@ -28,8 +35,14 @@ AT_STRUCT at_pack[]={
 	{AT_QCCID,"AT+QCCID\r\n","OK",300,parse_qccid_cmd}, //SIM ICCID AT+QCCID---+QCCID: 89860025128306012474
 	{AT_CSQ,"AT+CSQ\r\n","OK",300,parse_csq_cmd},//RSSI 信号质量 AT+CSQ  +CSQ: <rssi>,<ber>  +CSQ: (0-31,99),(0-7,99)
 	{AT_CREG,"AT+CREG=2\r\n","+CREG: 1",300,parse_creg_cmd},  //+CREG: 1,“D509”,”80D413D”,7    设备基站 LAC 位置区域码   设备基站 CID 基站编号，是个16位的数据（范围是0到65535）
+	{AT_CONTEXTID,"AT+QHTTPCFG=\"contextid\",1\r\n","OK",500,NULL},//配置PDP上下文ID为1；
+	{AT_RESPONSE,"AT+QHTTPCFG=\"responseheader\",1\r\n","OK",500,NULL}, //启用输出HTTP响应头信息
+	{AT_QIACTSET,"AT+QIACT=1\r\n","OK",500,NULL},
+	{AT_QIACTQA,"AT+QIACT?\r\n","+QIACT:1,1,1",500,NULL},
 	{AT_MAX,"","",0,NULL}
 };
+
+
 
 void	pure_gsmuart_buf(void)
 {
@@ -40,19 +53,25 @@ void	pure_gsmuart_buf(void)
 
 void MODEM_PWRON(void)
 {
+	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_RESET);	
+	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOC, MODEM_PWR_ON_OFF_Pin,GPIO_PIN_RESET);
+	HAL_Delay(5000);
 	HAL_GPIO_WritePin(GPIOC, MODEM_PWR_ON_OFF_Pin,GPIO_PIN_SET);
-	HAL_Delay(1000);
+	HAL_Delay(1);
+	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_SET);
+	HAL_Delay(11000);	
 }
 
 void MODEM_PWRKEY(void)
 {
 //	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_SET);
-	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
-	HAL_Delay(1500);
-	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_SET);	
-	HAL_Delay(1500);
-	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_RESET);	
-	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
+//	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
+//	HAL_Delay(1500);
+//	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_SET);	
+//	HAL_Delay(1500);
+//	HAL_GPIO_WritePin(GPIOA, MODEM_RST_Pin,GPIO_PIN_RESET);	
+//	HAL_GPIO_WritePin(MODEM_PWR_CTRL_GPIO_Port, MODEM_PWR_CTRL_Pin,GPIO_PIN_RESET);
 }
 void MODEM_RST(void)
 {		
@@ -107,7 +126,7 @@ void at_process(void)
 	}
 	else if(Modem_Dev.status==EN_CONNECT_STATE)  //HTTP连接
 	{
-
+		
 	}
 	else if(Modem_Dev.status==EN_CONNECTED_STATE)
 	{
@@ -458,7 +477,7 @@ void parse_another_cmd(char* buf, int len)
 		{
 
 		}
-	}
+	} 
 	else if(strstr(buf,"ALREADY CONNECT"))
 	{
 		Modem_Dev.status=EN_CONNECTED_STATE;
@@ -616,10 +635,187 @@ void Json_Pack(char *pBuf)
 		strcpy(pBuf, pStr);
 }
 	
+u8 Set_Post_Buf(char *sendstr,uint16_t len)
+{
+	memcpy(G_Post_Buf,sendstr,len);
+	return 0;
+}
 
+u8 Clr_Post_Buf(void)
+{
+	Post_Len=0;
+	return 0;
+}
 
+u8 Http_Set_Url(char *url,uint16_t len)
+{
+		char buf[50];
+	if(Modem_Dev.status!=EN_CONNECT_STATE)
+	{
+		url_statuc=0;
+	}
+	else if(Modem_Dev.status==EN_CONNECTED_STATE)
+	{
+		switch(url_statuc)
+		{
+			case 0:
+					module_recv_write_index=0;
+					GsmSendData("AT+QHTTPCFG=\"contextid\",1\r\n", strlen("AT+QHTTPCFG=\"contextid\",1\r\n"));
+					url_statuc=1;
+					rCount++;
+					rTime=20;
+					break;
+			case 1:
+					rTime--;
+					if(strstr((const char*)module_recv_buffer,(const char*)"OK\r\n"))
+					{
+						url_statuc=2;
+						rCount=0;
+					}
+					else if(rTime==0)
+					{
+						url_statuc=0;
+					}
+					break;
+			case 2:
+					module_recv_write_index=0;
+					GsmSendData("AT+QHTTPCFG=\"responseheader\",1\r\n", strlen("AT+QHTTPCFG=\"responseheader\",1\r\n"));
+					url_statuc=3;
+					rCount++;
+					rTime=20;
+					break;
+			case 3:
+					rTime --;
+					if(strstr((const char*)module_recv_buffer,(const char*)"OK\r\n")){
+						url_statuc = 4;
+						rCount = 0;
+					}
+					else if(rTime == 0)
+					{
+						url_statuc = 2;
+					}
+					break;
+			case 4:
+					module_recv_write_index=0;
+					sprintf(buf,"AT+QHTTPURL=%d,80\r\n",len);
+					GsmSendData(buf,strlen(buf));
+					url_statuc = 5;
+					rCount ++;
+					rTime = 20;
+					break;
+			case 5:
+					rTime --;
+					if(strstr((const char*)module_recv_buffer,(const char*)"CONNECT\r\n")){
+						url_statuc = 6;
+						rCount = 0;
+					}
+					else if(rTime == 0)
+					{
+						url_statuc = 4;
+					}
+					break;
+			case 6:
+					sprintf(buf,"%s\r\n",url);
+					GsmSendData(buf,strlen(buf));
+					url_statuc = 7;
+					rCount ++;
+					rTime = 20;
+					break;
+			case 7:
+					if(strstr((const char*)module_recv_buffer,(const char*)"OK\r\n")){
+					url_statuc = 8;
+					rCount = 0;
+					}
+					else if(rTime == 0)
+					{
+						url_statuc = 6;
+					}
+					break;		
+		}
+	}
+	if(rCount > 3)
+	{
+		rCount = 0;
+		url_statuc = 0;
+		Modem_Dev.status=EN_POWER_ON;
+	}
+	return 0;
+}
 
-
+char httpbuf[1024];
+u8 Http_Post_Data(void)
+{
+	static u8 post_sta = 0;
+	uint16_t len = Post_Len;
+	char  buf[50];
+	if(post_sta == 0){
+		memcpy(httpbuf,G_Post_Buf,len);
+		httpbuf[len]='\0';
+	}
+	
+	while(len>0 && url_statuc == 8){
+		{
+			switch(post_sta)
+			{
+				case 0:
+					module_recv_write_index=0;
+				  memset(buf,0,50);
+				  sprintf(buf,"AT+QHTTPPOST=%d,80,80\r\n",len);
+					GsmSendData(buf,strlen(buf));
+					post_sta = 1;
+					rCount++;
+					rTime = 20;
+					break;
+				case 1:
+					module_recv_write_index=0;
+					rTime --;
+					if(strstr((const char*)module_recv_buffer,(const char*)"CONNECT\r\n"))
+					{
+						post_sta = 2;
+						rCount = 0;
+					}
+					else if(rTime == 0)
+					{
+						post_sta = 1;
+					}					
+					break;
+				case 2:
+					module_recv_write_index=0;
+				  memset(buf,0,50);
+					sprintf(buf,"AT+QHTTPPOST=%d,80,80\r\n",len);
+					GsmSendData(buf,strlen(buf));
+					rCount++;
+					rTime = 20;
+					post_sta = 3;
+					break;
+				case 3:
+					rTime --;
+					module_recv_write_index=0;
+					if(strstr((const char*)module_recv_buffer,(const char*)"+QHTTPPOST: 0,200,"))
+					{
+						post_sta = 0;	
+						Clr_Post_Buf();
+					}
+					else if(rTime == 0)
+					{
+						post_sta = 2;
+					}	
+					break;
+			}
+		}
+		
+		if(rCount > 3)
+		{
+			post_sta = 0;
+			rCount = 0;
+			url_statuc = 0;
+			Modem_Dev.status=EN_POWER_ON;
+			return 1;
+		}
+	}
+	
+	return 0;
+}
 
 
 

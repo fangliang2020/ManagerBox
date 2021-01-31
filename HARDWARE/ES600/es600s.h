@@ -44,8 +44,10 @@ typedef enum{
 	AT_QCCID,  //SIM ICCID AT+QCCID
 	AT_CSQ,   //RSSI 信号质量 AT+CSQ	
 	AT_CREG, //+CREG: 1,“D509”,”80D413D”,7    设备基站 LAC 位置区域码   设备基站 CID 基站编号，是个16位的数据（范围是0到65535）
-	
-
+	AT_CONTEXTID,
+	AT_RESPONSE,
+	AT_QIACTSET,
+	AT_QIACTQA,
 	AT_MAX,
 }AT_CMD;
 

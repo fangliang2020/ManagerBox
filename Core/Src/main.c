@@ -56,6 +56,8 @@
 	uint8_t ID[2];
 	uint32_t tim6_cnt; 
 	uint8_t flag_delay200ms,flag_delay500ms,flag_delay1s,flag_delay3s;
+	
+	char uart2buf[20]="hello world!\r\n"; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,7 +87,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_2);
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -227,6 +229,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	 }
 	 else if(tim6_cnt%50==0) //1s
 	 {
+//		 HAL_UART_Transmit(&huart2, uart2buf,strlen(uart2buf),100);
 		 flag_delay1s=1;
 	//	 HAL_GPIO_TogglePin();
 	 }
